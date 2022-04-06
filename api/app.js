@@ -2,13 +2,13 @@ const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
 const router = require("./routes/hero-routes");
+const cors=require('cors');
+
 
 app.use(express.json());
+app.use(cors());
 app.use("/heros", router);
 
-// app.use("/", (req, res, next) => {
-//   res.send("This is our app");
-// });
 
 mongoose
   .connect(

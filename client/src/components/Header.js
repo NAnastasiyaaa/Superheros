@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { AppBar, Tabs, Tab, Toolbar, Typography } from "@mui/material";
 import FilterIcon from "@mui/icons-material/Filter";
-import {NavLink} from 'react-router-dom'
+import {NavLink} from 'react-router-dom';
+
 
 const Header = () => {
   const [value, setValue] = useState();
@@ -20,8 +21,8 @@ const Header = () => {
             value={value}
             onChange={(e, val) => setValue(val)}
           >
-            <Tab LinkComponent={} label="Add hero"></Tab>
-            <Tab label="Heros"></Tab>
+            <Tab LinkComponent={NavLink} to="/add" label="Add a superhero"></Tab>
+            <Tab LinkComponent={NavLink} to="/heros" label="Heros"></Tab>
           </Tabs>
         </Toolbar>
       </AppBar>
