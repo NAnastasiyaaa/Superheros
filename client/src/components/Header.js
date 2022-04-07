@@ -1,28 +1,44 @@
 import React, { useState } from "react";
 import { AppBar, Tabs, Tab, Toolbar, Typography } from "@mui/material";
-import FilterIcon from "@mui/icons-material/Filter";
-import {NavLink} from 'react-router-dom';
-
+// import FilterIcon from "@mui/icons-material/Filter";
+import { NavLink } from "react-router-dom";
+import Hero from "./images/Hero.png";
 
 const Header = () => {
   const [value, setValue] = useState();
 
   return (
     <div>
-      <AppBar sx={{backgroundColor:"#008B8B"}} position="sticky">
+      <AppBar sx={{ backgroundColor: "#008B8B" }} position="sticky">
         <Toolbar>
-          <Typography>
-            <FilterIcon /> All the superheros
-          </Typography>
+          <NavLink to="/" style={{ color: "white" }}>
+            <Typography>
+              <img src={Hero} style={{ width: "150px", padding: "6px" }}></img>
+            </Typography>
+          </NavLink>
           <Tabs
-            sx={{ml:"auto"}}
+            sx={{ ml: "auto" }}
             textColor="inherit"
-            indicatorColor="secondary"
+            TabIndicatorProps={{
+              style: {
+                backgroundColor: "#D97D54",
+              },
+            }}
             value={value}
             onChange={(e, val) => setValue(val)}
           >
-            <Tab LinkComponent={NavLink} to="/add" label="Add a superhero"></Tab>
-            <Tab LinkComponent={NavLink} to="/heros" label="Heros"></Tab>
+            <Tab
+              LinkComponent={NavLink}
+              to="/add"
+              label="Add a superhero"
+              sx={{ fontWeight: "bold" }}
+            ></Tab>
+            <Tab
+              LinkComponent={NavLink}
+              sx={{ fontWeight: "bold" }}
+              to="/heros"
+              label="Heros"
+            ></Tab>
           </Tabs>
         </Toolbar>
       </AppBar>
