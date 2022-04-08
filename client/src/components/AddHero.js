@@ -1,7 +1,9 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import { FormLabel, TextField, Box, Button } from "@mui/material";
 import axios from "axios";
-import {useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+import AddBoxIcon from "@mui/icons-material/AddBox";
+import CameraAltIcon from "@mui/icons-material/CameraAlt";
 
 const AddHero = () => {
   const history = useNavigate();
@@ -9,9 +11,9 @@ const AddHero = () => {
     nickname: "",
     real_name: "",
     origin_description: "",
-    superpowers: "",
+    superpowers: [],
     catch_phrase: "",
-    image: "",
+    image: [],
   });
 
   const handleChange = (e) => {
@@ -29,19 +31,45 @@ const AddHero = () => {
         origin_description: String(inputs.origin_description),
         superpowers: Array(inputs.superpowers),
         catch_phrase: String(inputs.catch_phrase),
-        image: String(inputs.image),
+        image: inputs.image.filter((f) => f !== ""),
       })
       .then((res) => res.data);
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    sendRequest().then(()=>history('/heros'));
-    console.log(inputs)
+    sendRequest().then(() => history("/heros"));
+  };
+
+  const handleLinks = (e, index) => {
+    setInputs({
+      ...inputs,
+      image: inputs.image.map((link, i) => {
+        if (i === index) return e.target.value;
+        return link;
+      }),
+    });
+  };
+
+  const addLinkInput = () => {
+    setInputs({ ...inputs, image: [...inputs.image, ""] });
+  };
+
+  const addPowerInput = () => {
+    setInputs({ ...inputs, superpowers: [...inputs.superpowers, ""] });
+  };
+
+  const handlePowers = (e, index) => {
+    setInputs({
+      ...inputs,
+      superpowers: inputs.superpowers.map((link, i) => {
+        if (i === index) return e.target.value;
+        return link;
+      }),
+    });
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <div>
       <Box
         display="flex"
         flexDirection="column"
@@ -61,7 +89,6 @@ const AddHero = () => {
           variant="outlined"
           name="nickname"
         />
-
         <FormLabel>Real name</FormLabel>
         <TextField
           value={inputs.real_name}
@@ -70,7 +97,6 @@ const AddHero = () => {
           variant="outlined"
           name="real_name"
         />
-
         <FormLabel>Origin description</FormLabel>
         <TextField
           value={inputs.origin_description}
@@ -81,14 +107,19 @@ const AddHero = () => {
         />
 
         <FormLabel>Superpowers</FormLabel>
-        <TextField
-          value={inputs.superpowers}
-          onChange={handleChange}
-          margin="normal"
-          variant="outlined"
-          name="superpowers"
-        />
+        <Button type="plus" onClick={addPowerInput} color="success">
+          Add superpower... <AddBoxIcon />
+        </Button>
 
+        {inputs.superpowers.map((link, index) => (
+          <TextField
+            value={inputs.superpowers[index]}
+            onChange={(e) => handlePowers(e, index)}
+            margin="normal"
+            variant="outlined"
+            name="superpowers"
+          />
+        ))}
         <FormLabel>Catch_phrase</FormLabel>
         <TextField
           value={inputs.catch_phrase}
@@ -99,19 +130,32 @@ const AddHero = () => {
         />
 
         <FormLabel>Image</FormLabel>
-        <TextField
-          value={inputs.image}
-          onChange={handleChange}
-          margin="normal"
-          variant="outlined"
-          name="image"
-        />
+        <Button type="plus" onClick={addLinkInput} color="success">
+          Add image...
+          <CameraAltIcon />
+        </Button>
 
-        <Button variant="contained" type="submit">
+        {inputs.image.map((link, index) => (
+          <TextField
+            value={inputs.image[index]}
+            onChange={(e) => handleLinks(e, index)}
+            margin="normal"
+            variant="outlined"
+            name="image"
+          />
+        ))}
+
+        <Button
+          type="submit"
+          variant="outlined"
+          color="success"
+          onClick={handleSubmit}
+          sx={{ marginTop: 5, marginBottom: 15 }}
+        >
           Add hero
         </Button>
       </Box>
-    </form>
+    </div>
   );
 };
 

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { AppBar, Tabs, Tab, Toolbar, Typography } from "@mui/material";
-// import FilterIcon from "@mui/icons-material/Filter";
 import { NavLink } from "react-router-dom";
 import Hero from "./images/Hero.png";
 
@@ -13,7 +12,11 @@ const Header = () => {
         <Toolbar>
           <NavLink to="/" style={{ color: "white" }}>
             <Typography>
-              <img src={Hero} style={{ width: "150px", padding: "6px" }}></img>
+              <img
+                src={Hero}
+                style={{ width: "150px", padding: "6px" }}
+                alt=""
+              ></img>
             </Typography>
           </NavLink>
           <Tabs

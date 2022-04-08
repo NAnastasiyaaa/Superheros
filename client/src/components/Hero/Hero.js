@@ -7,16 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 const Hero = (props) => {
   const history = useNavigate();
-
-  const {
-    _id,
-    nickname,
-    real_name,
-    origin_description,
-    superpowers,
-    catch_phrase,
-    image,
-  } = props.hero;
+  const { _id, nickname, image } = props.hero;
 
   const deleteHandler = async () => {
     await axios
@@ -26,16 +17,10 @@ const Hero = (props) => {
       .then(() => history("/heros"));
   };
 
-
   return (
     <div className="card">
-      <img src={image} alt={nickname} />
+      {image.length !== 0 && <img src={image[0]} alt={image.originalname} />}
       <h3>{nickname}</h3>
-      <p>{real_name}</p>
-      <p>{origin_description}</p>
-      <p>{superpowers}</p>
-      <p>{catch_phrase}</p>
-
       <Button LinkComponent={Link} to={`/heros/${_id}`} sx={{ mt: "auto" }}>
         Update
       </Button>

@@ -2,19 +2,29 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { FormLabel, TextField, Box, Button } from "@mui/material";
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import CameraAltIcon from '@mui/icons-material/CameraAlt';
+import { color } from "@mui/system";
 
 const HeroDetail = () => {
   const [inputs, setInputs] = useState({});
   const id = useParams().id;
   const history = useNavigate();
+  const [fileLink, setFileLink] = useState([]);
+  const [power, setPower] = useState([]);
 
   useEffect(() => {
     const fetchHandler = async () => {
       await axios
         .get(`http://localhost:5000/heros/${id}`)
-        .then((res) => res.data).then(data=>setInputs(data.hero));
+        .then((res) => res.data)
+        .then((data) => {
+          setInputs(data.hero);
+          setFileLink(data.hero.image);
+          setPower(data.hero.superpowers);
+        });
     };
-    fetchHandler()
+    fetchHandler();
   }, [id]);
 
   const sendRequest = async () => {
@@ -23,16 +33,15 @@ const HeroDetail = () => {
         nickname: String(inputs.nickname),
         real_name: String(inputs.real_name),
         origin_description: String(inputs.origin_description),
-        superpowers: Array(inputs.superpowers),
+        superpowers: power.filter((f) => f !== ""),
         catch_phrase: String(inputs.catch_phrase),
-        image: String(inputs.image),
+        image: fileLink.filter((f) => f !== ""),
       })
       .then((res) => res.data);
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    sendRequest().then(()=>history("/heros"))
+    sendRequest().then(() => history("/heros"));
   };
 
   const handleChange = (e) => {
@@ -42,81 +51,119 @@ const HeroDetail = () => {
     }));
   };
 
+  const handleLinks = (e, index) => {
+    setFileLink(
+      fileLink.map((link, i) => {
+        if (i === index) return e.target.value;
+        return link;
+      })
+    );
+  };
+
+  const addPowerInput = () => {
+    setPower([...power, ""]);
+  };
+
+  const handlePowers = (e, index) => {
+    setPower(
+      power.map((s, i) => {
+        if (i === index) return e.target.value;
+        return s;
+      })
+    );
+  };
+
+  const addLinkInput = () => {
+    setFileLink([...fileLink, ""]);
+  };
+
   return (
     <div>
-     {inputs && <form onSubmit={handleSubmit}>
-        <Box
-          display="flex"
-          flexDirection="column"
-          justifyContent={"center"}
-          maxWidth={700}
-          alignContent={"center"}
-          alignSelf="center"
-          marginLeft={"auto"}
-          marginRight={"auto"}
-          marginTop={5}
-        >
-          <FormLabel>Nickname</FormLabel>
-          <TextField
-            value={inputs.nickname}
-            onChange={handleChange}
-            margin="normal"
-            variant="outlined"
-            name="nickname"
-          />
+      {inputs && (
+        <div>
+          <Box
+            display="flex"
+            flexDirection="column"
+            justifyContent={"center"}
+            maxWidth={700}
+            alignContent={"center"}
+            alignSelf="center"
+            marginLeft={"auto"}
+            marginRight={"auto"}
+            marginTop={5}
+          >
+            <FormLabel>Nickname</FormLabel>
+            <TextField
+              value={inputs.nickname}
+              onChange={handleChange}
+              margin="normal"
+              variant="outlined"
+              name="nickname"
+            />
+            <FormLabel>Real name</FormLabel>
+            <TextField
+              value={inputs.real_name}
+              onChange={handleChange}
+              margin="normal"
+              variant="outlined"
+              name="real_name"
+            />
+            <FormLabel>Origin description</FormLabel>
+            <TextField
+              value={inputs.origin_description}
+              onChange={handleChange}
+              margin="normal"
+              variant="outlined"
+              name="origin_description"
+            />
 
-          <FormLabel>Real name</FormLabel>
-          <TextField
-            value={inputs.real_name}
-            onChange={handleChange}
-            margin="normal"
-            variant="outlined"
-            name="real_name"
-          />
+            <FormLabel>Superpowers</FormLabel>
+            <Button  type="plus" onClick={addPowerInput}  color="success">
+              Add superpower... <AddBoxIcon/>
+            </Button>
+            
 
-          <FormLabel>Origin description</FormLabel>
-          <TextField
-            value={inputs.origin_description}
-            onChange={handleChange}
-            margin="normal"
-            variant="outlined"
-            name="origin_description"
-          />
+            {power.map((p, index) => (
+              <TextField
+                value={power[index]}
+                onChange={(e) => handlePowers(e, index)}
+                margin="normal"
+                variant="outlined"
+                name="superpowers"
+              />
+            ))}
 
-          <FormLabel>Superpowers</FormLabel>
-          <TextField
-            value={inputs.superpowers}
-            onChange={handleChange}
-            margin="normal"
-            variant="outlined"
-            name="superpowers"
-          />
+            <FormLabel>Catch_phrase</FormLabel>
+            <TextField
+              value={inputs.catch_phrase}
+              onChange={handleChange}
+              margin="normal"
+              variant="outlined"
+              name="catch_phrase"
+            />
 
-          <FormLabel>Catch_phrase</FormLabel>
-          <TextField
-            value={inputs.catch_phrase}
-            onChange={handleChange}
-            margin="normal"
-            variant="outlined"
-            name="catch_phrase"
-          />
+            <FormLabel>Image</FormLabel>
+            <Button  type="plus" onClick={addLinkInput} color="success"  >
+              Add image...<CameraAltIcon/>
+            </Button>
 
-          <FormLabel>Image</FormLabel>
-          <TextField
-            value={inputs.image}
-            onChange={handleChange}
-            margin="normal"
-            variant="outlined"
-            name="image"
-          />
+            {fileLink.map((link, index) => (
+              <TextField
+                value={fileLink[index]}
+                onChange={(e) => handleLinks(e, index)}
+                margin="normal"
+                variant="outlined"
+                name="image"
+              />
+            ))}
 
-          <Button variant="contained" type="submit">
-            Update hero
-          </Button>
-        </Box>
-      </form>}
+            <Button  type="submit" variant="outlined" color="success" onClick={handleSubmit} sx={{ marginTop:5,  marginBottom: 15}} >
+              Update hero
+            </Button>
+          </Box>
+        </div>
+      )}
     </div>
   );
 };
-
 export default HeroDetail;

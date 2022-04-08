@@ -1,28 +1,47 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Hero from './Hero'
-import './Hero.css';
-const URL = "http://localhost:5000/heros";
-
-const fetchHandler = async () => {
-  return await axios.get(URL).then((res) => res.data);
-};
+import Hero from "./Hero";
+import "./Hero.css";
+import { Pagination } from "@mui/material";
+import FirstPageIcon from "@mui/icons-material/FirstPage";
+import LastPageIcon from "@mui/icons-material/LastPage";
 
 const Heros = () => {
-  const [heros, setHeros] = useState();
-  useEffect(() => {
-    fetchHandler().then((data) => setHeros(data.heros));
-  }, []);
-  console.log(heros);
+  //
+  const [pageNumber, setPageNumber] = useState(0);
+  const [numberOfPages, setNumberOfPages] = useState(0);
+  const [heros, setHeros] = useState([]);
 
-  
+  const pages = new Array(numberOfPages).fill(null).map((v, i) => i);
+
+  useEffect(() => {
+    fetch(`http://localhost:5000/heros?page=${pageNumber}`)
+      .then((response) => response.json())
+      .then(({ totalPages, heros }) => {
+        setHeros(heros);
+        setNumberOfPages(totalPages);
+      });
+  }, [pageNumber]);
+
   return (
-    <div>
+    <div className="heroCard">
+      <p style={{'margin-left':"10px"}}>Page of {pageNumber + 1}</p>
+      {pages.map((pageIndex) => (
+       <button 
+          count={numberOfPages}
+          className="paginationNumber"
+          key={pageIndex}
+          onClick={() => setPageNumber(pageIndex)}
+        >
+          {pageIndex + 1}
+        </button>
+      ))}
+
       <ul>
         {heros &&
           heros.map((hero, i) => (
             <li className="hero" key={i}>
-              <Hero hero={hero}/>
+              <Hero hero={hero} />
             </li>
           ))}
       </ul>

@@ -2,15 +2,21 @@ const Hero = require("../model/Hero");
 
 const getAllHeros = async (req, res, next) => {
   let heros;
+  const PAGE_SIZE = 5;
+  const page = parseInt(req.query.page || "0");
+  const total = await Hero.countDocuments({});
+
   try {
-    heros = await Hero.find();
+    heros = await Hero.find({})
+      .limit(PAGE_SIZE)
+      .skip(PAGE_SIZE * page);
   } catch (err) {
     console.log(err);
   }
   if (!heros) {
     return res.status(404).json({ message: "No heros found..." });
   }
-  return res.status(200).json({ heros });
+  return res.status(200).json({ totalPages: Math.ceil(total / PAGE_SIZE), heros });
 };
 
 exports.getAllHeros = getAllHeros;
