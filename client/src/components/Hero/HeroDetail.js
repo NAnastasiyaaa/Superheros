@@ -4,7 +4,7 @@ import axios from "axios";
 import { FormLabel, TextField, Box, Button } from "@mui/material";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
-import { color } from "@mui/system";
+
 
 const HeroDetail = () => {
   const [inputs, setInputs] = useState({});
@@ -94,11 +94,13 @@ const HeroDetail = () => {
           >
             <FormLabel>Nickname</FormLabel>
             <TextField
+              data-testid="button"
               value={inputs.nickname}
               onChange={handleChange}
               margin="normal"
               variant="outlined"
               name="nickname"
+              
             />
             <FormLabel>Real name</FormLabel>
             <TextField

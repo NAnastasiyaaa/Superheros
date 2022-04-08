@@ -21,10 +21,10 @@ const Hero = (props) => {
     <div className="card">
       {image.length !== 0 && <img src={image[0]} alt={image.originalname} />}
       <h3>{nickname}</h3>
-      <Button LinkComponent={Link} to={`/heros/${_id}`} sx={{ mt: "auto" }}>
+      <Button data-testid="search-button" LinkComponent={Link} to={`/heros/${_id}`} sx={{ mt: "auto" }}>
         Update
       </Button>
-      <Button onClick={deleteHandler} sx={{ mt: "auto" }}>
+      <Button onClick={deleteHandler} sx={{ mt: "auto" }} >
         Delete
       </Button>
     </div>

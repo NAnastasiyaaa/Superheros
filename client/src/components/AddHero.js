@@ -88,6 +88,7 @@ const AddHero = () => {
           margin="normal"
           variant="outlined"
           name="nickname"
+          placeholder="nickname"
         />
         <FormLabel>Real name</FormLabel>
         <TextField

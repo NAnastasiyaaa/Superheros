@@ -1,13 +1,8 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import Hero from "./Hero";
 import "./Hero.css";
-import { Pagination } from "@mui/material";
-import FirstPageIcon from "@mui/icons-material/FirstPage";
-import LastPageIcon from "@mui/icons-material/LastPage";
 
 const Heros = () => {
-  //
   const [pageNumber, setPageNumber] = useState(0);
   const [numberOfPages, setNumberOfPages] = useState(0);
   const [heros, setHeros] = useState([]);
@@ -25,9 +20,10 @@ const Heros = () => {
 
   return (
     <div className="heroCard">
-      <p style={{'margin-left':"10px"}}>Page of {pageNumber + 1}</p>
+      <p style={{ marginLeft: "10px" }}>Page of {pageNumber + 1}</p>
       {pages.map((pageIndex) => (
-       <button 
+        <button
+          data-testid="button"
           count={numberOfPages}
           className="paginationNumber"
           key={pageIndex}

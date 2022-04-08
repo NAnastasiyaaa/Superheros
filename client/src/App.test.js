@@ -1,8 +1,28 @@
-import { render, screen } from '@testing-library/react';
-import App from './App';
+import Heros from "./components/Hero/Heros";
+import { render } from "@testing-library/react";
+import React from "react";
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+
+it("Heros Component", async () => {
+  render(<Heros />);
 });
+
+it("render input without crashing",  () => {
+  const input = document.createElement('input');
+  render(<Heros />, input);
+});
+
+it("render button without crashing",  () => {
+  const button = document.createElement('button');
+  render(<Heros />, button);
+});
+
+
+
+
+
+
+
+
+
+
